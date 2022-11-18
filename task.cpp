@@ -1,5 +1,5 @@
 //
-// Created by Георгий on 07.11.2022.
+// Created by Казанцев Иван on 07.11.2022.
 //
 
 
@@ -7,29 +7,19 @@
 #include <string>
 #include <vector>
 #include "header.h"
-#include <time.h>
 
-
-int main() {
-
-    std::string text;
-    std::cout << "Enter your text you want to encrypt: " << std::endl;
-    std::cin >> text;
-    int key;
-    std::cout << "Enter key - " << std::endl;
-    std::cin >> key;
+int main(int argc, char **argv) {
+    std::string text = argv[1];
+    int key = atoi(argv[2]);
     size_t size = text.size();
     std::vector<unsigned char> bytes(size);
-    unsigned int leftShift;
-    std::cout << "Enter shift - " << std::endl;
-    std::cin >> leftShift;
+    unsigned int leftShift = 3;
     for (size_t i = 0; i < text.size(); ++i) {
         bytes[i] = text[i];
     }
     for (size_t j = 0; j < bytes.size(); ++j) {
-        bytes[j] = bytes[j] >> leftShift | bytes[j] << (8 - leftShift);
+        bytes[j] = bytes[j] << leftShift | bytes[j] >> (8 - leftShift);
     }
-    std::cout << std::endl;
 
     xoring(bytes, key);
 
@@ -41,8 +31,6 @@ int main() {
     }
     f1.close();
 
-    std::cout << std::endl;
-
     std::ifstream f2;
     f2.open("D:\\text", std::ios::binary);
 
@@ -53,18 +41,12 @@ int main() {
         bytes[i] = static_cast<unsigned char>(encryptedData[i]);
     }
 
-    for (size_t j = 0; j < bytes.size(); ++j) {
-        std::cout << bytes[j];
-    }
     std::cout << std::endl;
 
     dexoring(bytes, key);
 
-    std::cout << std::endl;
-    std::cout << std::endl;
-
     for (size_t j = 0; j < bytes.size(); ++j) {
-        bytes[j] = bytes[j] >> (8 - leftShift) | bytes[j] << leftShift;
+        bytes[j] = bytes[j] << (8 - leftShift) | bytes[j] >> leftShift;
         std::cout << bytes[j];
     }
 }
