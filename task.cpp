@@ -8,6 +8,8 @@
 #include <vector>
 #include "header.h"
 
+///Программа работает через консоль, в которую необходимо ввести строчку, которую нужно закодировать, и ключ.
+
 int main(int argc, char **argv) {
     std::string text = argv[1];
     int key = atoi(argv[2]);
@@ -17,14 +19,14 @@ int main(int argc, char **argv) {
     for (size_t i = 0; i < text.size(); ++i) {
         bytes[i] = text[i];
     }
-    for (size_t j = 0; j < bytes.size(); ++j) {
+    for (size_t j = 0; j < bytes.size(); ++j) {  ///Сдвиг
         bytes[j] = bytes[j] << leftShift | bytes[j] >> (8 - leftShift);
     }
 
-    xoring(bytes, key);
+    xoring(bytes, key);   ///Гамма
 
     std::ofstream f1;
-    f1.open("D:\\text", std::ios::binary);
+    f1.open("D:\\text", std::ios::binary);  ///Запись в файл
     for (auto i: bytes) {
         char r = static_cast<char>(i);
         f1.write(&r, sizeof(r));
@@ -32,7 +34,7 @@ int main(int argc, char **argv) {
     f1.close();
 
     std::ifstream f2;
-    f2.open("D:\\text", std::ios::binary);
+    f2.open("D:\\text", std::ios::binary);   ///Запись из файла
 
     std::vector<char> encryptedData((std::istreambuf_iterator<char>(f2)),
                                     std::istreambuf_iterator<char>());
@@ -43,9 +45,9 @@ int main(int argc, char **argv) {
 
     std::cout << std::endl;
 
-    dexoring(bytes, key);
+    dexoring(bytes, key);   ///Та же самая гамма, но названная иначе
 
-    for (size_t j = 0; j < bytes.size(); ++j) {
+    for (size_t j = 0; j < bytes.size(); ++j) {  ///Сдвиг в обратную сторону
         bytes[j] = bytes[j] << (8 - leftShift) | bytes[j] >> leftShift;
         std::cout << bytes[j];
     }
